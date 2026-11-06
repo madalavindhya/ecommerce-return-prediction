@@ -1,0 +1,310 @@
+{
+  "experiment_name": "Ecommerce_Product_Return_Prediction",
+  "tracking_uri": "sqlite:///C:/Users/vindya/Desktop/mlops internal/mlflow.db",
+  "training_dataset": {
+    "file": "Section7_Q4_Ecommerce_Product_Return_CICD.csv",
+    "original_shape": [
+      1200,
+      14
+    ],
+    "processed_shape": [
+      1200,
+      26
+    ],
+    "columns": [
+      "Order_ID",
+      "Product_Category",
+      "Product_Price_INR",
+      "Discount_Percent",
+      "Expected_Delivery_Days",
+      "Actual_Delivery_Days",
+      "Customer_Rating_PreOrder",
+      "Previous_Returns",
+      "Previous_Orders",
+      "Payment_Method",
+      "Damaged_Package_Flag",
+      "Package_Size",
+      "Promotion_Active",
+      "Return_Status"
+    ],
+    "target_distribution": {
+      "Not Returned": 929,
+      "Returned": 271
+    }
+  },
+  "preprocessing": {
+    "source_rows": 1200,
+    "rows_after_deduplication": 1200,
+    "duplicate_rows_removed": 0,
+    "rows_without_valid_target_removed": 0,
+    "rows_after_target_validation": 1200,
+    "missing_values_before_cleaning": {
+      "Order_ID": 0,
+      "Product_Price_INR": 36,
+      "Discount_Percent": 36,
+      "Expected_Delivery_Days": 0,
+      "Actual_Delivery_Days": 36,
+      "Customer_Rating_PreOrder": 36,
+      "Previous_Returns": 0,
+      "Previous_Orders": 0,
+      "Product_Category": 0,
+      "Payment_Method": 36,
+      "Damaged_Package_Flag": 0,
+      "Package_Size": 0,
+      "Promotion_Active": 0,
+      "Return_Status": 0
+    },
+    "invalid_numeric_values_marked_missing": {
+      "Product_Price_INR": 39,
+      "Discount_Percent": 38,
+      "Expected_Delivery_Days": 0,
+      "Actual_Delivery_Days": 36,
+      "Customer_Rating_PreOrder": 36,
+      "Previous_Returns": 0,
+      "Previous_Orders": 0
+    },
+    "missing_values_after_cleaning": {
+      "Order_ID": 0,
+      "Product_Price_INR": 39,
+      "Discount_Percent": 38,
+      "Expected_Delivery_Days": 0,
+      "Actual_Delivery_Days": 36,
+      "Customer_Rating_PreOrder": 36,
+      "Previous_Returns": 0,
+      "Previous_Orders": 0,
+      "Product_Category": 0,
+      "Payment_Method": 36,
+      "Damaged_Package_Flag": 0,
+      "Package_Size": 0,
+      "Promotion_Active": 0,
+      "Return_Status": 0
+    },
+    "target_distribution": {
+      "Not Returned": 929,
+      "Returned": 271
+    },
+    "excluded_from_model_features": [
+      "Order_ID"
+    ],
+    "model_preprocessing": {
+      "numeric_imputation": "training-split median",
+      "numeric_scaling": "StandardScaler",
+      "categorical_imputation": "training-split most frequent",
+      "categorical_encoding": "OneHotEncoder(handle_unknown='ignore')",
+      "fitted_without_test_data": true,
+      "encoded_feature_count": 25,
+      "encoded_feature_columns": [
+        "numerical__Product_Price_INR",
+        "numerical__Discount_Percent",
+        "numerical__Expected_Delivery_Days",
+        "numerical__Actual_Delivery_Days",
+        "numerical__Customer_Rating_PreOrder",
+        "numerical__Previous_Returns",
+        "numerical__Previous_Orders",
+        "numerical__delivery_delay",
+        "numerical__customer_return_frequency",
+        "categorical__Product_Category_Beauty",
+        "categorical__Product_Category_Electronics",
+        "categorical__Product_Category_Fashion",
+        "categorical__Product_Category_Home",
+        "categorical__Product_Category_Sports",
+        "categorical__Payment_Method_COD",
+        "categorical__Payment_Method_Card",
+        "categorical__Payment_Method_UPI",
+        "categorical__Payment_Method_Wallet",
+        "categorical__Damaged_Package_Flag_No",
+        "categorical__Damaged_Package_Flag_Yes",
+        "categorical__Package_Size_Large",
+        "categorical__Package_Size_Medium",
+        "categorical__Package_Size_Small",
+        "categorical__Promotion_Active_No",
+        "categorical__Promotion_Active_Yes"
+      ]
+    }
+  },
+  "feature_engineering": {
+    "features": [
+      "delivery_delay",
+      "customer_return_frequency"
+    ],
+    "discount_feature": "Discount_Percent retained and range-validated [0, 100]",
+    "excluded_features": [
+      "Order_ID"
+    ],
+    "zero_previous_orders_frequency": 0.0
+  },
+  "split": {
+    "train_rows": 960,
+    "test_rows": 240,
+    "stratified": true,
+    "random_state": 42
+  },
+  "model_comparison": [
+    {
+      "model_name": "LogisticRegression",
+      "params": {
+        "class_weight": "balanced",
+        "max_iter": 1500
+      },
+      "metrics": {
+        "accuracy": 0.6083333333333333,
+        "precision": 0.2727272727272727,
+        "recall": 0.4444444444444444,
+        "f1_score": 0.3380281690140845,
+        "confusion_matrix": [
+          [
+            122,
+            64
+          ],
+          [
+            30,
+            24
+          ]
+        ],
+        "confusion_matrix_labels": [
+          "Not Returned",
+          "Returned"
+        ],
+        "classification_report": {
+          "Not Returned": {
+            "precision": 0.8026315789473685,
+            "recall": 0.6559139784946236,
+            "f1-score": 0.7218934911242604,
+            "support": 186.0
+          },
+          "Returned": {
+            "precision": 0.2727272727272727,
+            "recall": 0.4444444444444444,
+            "f1-score": 0.3380281690140845,
+            "support": 54.0
+          },
+          "accuracy": 0.6083333333333333,
+          "macro avg": {
+            "precision": 0.5376794258373205,
+            "recall": 0.5501792114695341,
+            "f1-score": 0.5299608300691725,
+            "support": 240.0
+          },
+          "weighted avg": {
+            "precision": 0.6834031100478469,
+            "recall": 0.6083333333333333,
+            "f1-score": 0.6355237936494709,
+            "support": 240.0
+          }
+        }
+      },
+      "mlflow_run_id": "217bed2420c849a69bf789bb3bc146e0"
+    },
+    {
+      "model_name": "RandomForestClassifier",
+      "params": {
+        "n_estimators": 300,
+        "min_samples_leaf": 2,
+        "class_weight": "balanced_subsample"
+      },
+      "metrics": {
+        "accuracy": 0.7625,
+        "precision": 0.2857142857142857,
+        "recall": 0.037037037037037035,
+        "f1_score": 0.06557377049180328,
+        "confusion_matrix": [
+          [
+            181,
+            5
+          ],
+          [
+            52,
+            2
+          ]
+        ],
+        "confusion_matrix_labels": [
+          "Not Returned",
+          "Returned"
+        ],
+        "classification_report": {
+          "Not Returned": {
+            "precision": 0.776824034334764,
+            "recall": 0.9731182795698925,
+            "f1-score": 0.863961813842482,
+            "support": 186.0
+          },
+          "Returned": {
+            "precision": 0.2857142857142857,
+            "recall": 0.037037037037037035,
+            "f1-score": 0.06557377049180328,
+            "support": 54.0
+          },
+          "accuracy": 0.7625,
+          "macro avg": {
+            "precision": 0.5312691600245248,
+            "recall": 0.5050776583034647,
+            "f1-score": 0.46476779216714265,
+            "support": 240.0
+          },
+          "weighted avg": {
+            "precision": 0.6663243408951564,
+            "recall": 0.7625,
+            "f1-score": 0.6843245040885793,
+            "support": 240.0
+          }
+        }
+      },
+      "mlflow_run_id": "bcdd2ad74c724b6395261fa95311a529"
+    }
+  ],
+  "best_model": {
+    "model_name": "LogisticRegression",
+    "selection_criteria": "Highest Returned-class F1-score, then recall, then accuracy",
+    "metrics": {
+      "accuracy": 0.6083333333333333,
+      "precision": 0.2727272727272727,
+      "recall": 0.4444444444444444,
+      "f1_score": 0.3380281690140845,
+      "confusion_matrix": [
+        [
+          122,
+          64
+        ],
+        [
+          30,
+          24
+        ]
+      ],
+      "confusion_matrix_labels": [
+        "Not Returned",
+        "Returned"
+      ],
+      "classification_report": {
+        "Not Returned": {
+          "precision": 0.8026315789473685,
+          "recall": 0.6559139784946236,
+          "f1-score": 0.7218934911242604,
+          "support": 186.0
+        },
+        "Returned": {
+          "precision": 0.2727272727272727,
+          "recall": 0.4444444444444444,
+          "f1-score": 0.3380281690140845,
+          "support": 54.0
+        },
+        "accuracy": 0.6083333333333333,
+        "macro avg": {
+          "precision": 0.5376794258373205,
+          "recall": 0.5501792114695341,
+          "f1-score": 0.5299608300691725,
+          "support": 240.0
+        },
+        "weighted avg": {
+          "precision": 0.6834031100478469,
+          "recall": 0.6083333333333333,
+          "f1-score": 0.6355237936494709,
+          "support": 240.0
+        }
+      }
+    },
+    "mlflow_run_id": "217bed2420c849a69bf789bb3bc146e0",
+    "registered_model_name": "EcommerceProductReturnBestModel",
+    "registered_model_version": 3,
+    "artifact_path": "models\\best_model.joblib"
+  }
+}

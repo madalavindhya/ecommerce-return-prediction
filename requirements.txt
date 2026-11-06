@@ -1,0 +1,5 @@
+-r requirements-api.txt
+httpx==0.28.1
+mlflow==2.22.5
+pytest==8.4.2
+SQLAlchemy==2.0.57
