@@ -132,12 +132,12 @@ starts it, and smoke-tests `/health` and `/predict` on the hosted runner.
 
 The project is pushed to
 <https://github.com/madalavindhya/ecommerce-return-prediction>. The latest
-verified project-code commit is `213897f38b18af498148035e34f19b72738ecc68`.
+verified commit is `09716cfe29db06248870e562c62f65330d882019`.
 The successful GitHub Actions run is
-<https://github.com/madalavindhya/ecommerce-return-prediction/actions/runs/42198106312>.
+<https://github.com/madalavindhya/ecommerce-return-prediction/actions/runs/42203108842>.
 Both validation/build and publish jobs passed. The publish job pushed
 `ghcr.io/madalavindhya/ecommerce-return-prediction` with `latest` and
-`sha-213897f38b18af498148035e34f19b72738ecc68` tags, pulled that commit-tagged
+`sha-09716cfe29db06248870e562c62f65330d882019` tags, pulled that commit-tagged
 image on the GitHub-hosted Docker runner, ran it, and verified both endpoints.
 
 The recorded container responses were:

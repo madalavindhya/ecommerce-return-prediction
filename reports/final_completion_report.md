@@ -3,11 +3,11 @@
 **Project:** E-Commerce Product Return Prediction with MLflow and CI/CD  
 **Repository:** <https://github.com/madalavindhya/ecommerce-return-prediction>  
 **Verification date:** 2026-11-06  
-**Verified project-code commit:** `213897f38b18af498148035e34f19b72738ecc68`
+**Verified commit:** `09716cfe29db06248870e562c62f65330d882019`
 
 ## Final verification status
 
-- **Latest verified GitHub Actions run:** [Run #3](https://github.com/madalavindhya/ecommerce-return-prediction/actions/runs/42198106312) — completed successfully.
+- **Verified GitHub Actions run:** [Run #4](https://github.com/madalavindhya/ecommerce-return-prediction/actions/runs/42203108842) — completed successfully.
 - **CI jobs:** `validate-test-build` passed (dependency install, Python compilation, pytest, Docker build); `publish` passed (GHCR login, image publish, image pull, and container endpoint smoke tests).
 - **GitHub source:** the local `main` HEAD and remote `origin/main` matched the verified commit SHA when checked.
 - **GHCR:** the commit-tagged image and `latest` were published as `ghcr.io/madalavindhya/ecommerce-return-prediction`.
@@ -18,7 +18,7 @@
 The workflow log confirms it downloaded:
 
 ```text
-ghcr.io/madalavindhya/ecommerce-return-prediction:sha-213897f38b18af498148035e34f19b72738ecc68
+ghcr.io/madalavindhya/ecommerce-return-prediction:sha-09716cfe29db06248870e562c62f65330d882019
 ```
 
 It started the image and tested `/health` and `/predict`. Actual responses:
@@ -60,7 +60,7 @@ training runs. The best model is registered as
 | 5 | Create repository with code, model, dependencies, configuration | Repository exists at the URL above; dataset, source, serialized model, reports, tests, Docker files, and workflow are on `main`. Local/remote SHA was verified. |
 | 6 | Automate dependency install, code validation, and tests | Latest Actions `validate-test-build` job passed dependency install, `compileall`, and pytest. Local pytest result: **6 passed**. |
 | 7 | Build and publish Docker image to GHCR | Latest `validate-test-build` Docker build passed. Latest `publish` job logged in with `GITHUB_TOKEN`, published `latest` and the commit SHA tag, and completed successfully. |
-| 8 | Demonstrate workflow automatic trigger | Pushes to `main` triggered workflow run #3 automatically. Run details and commit SHA are linked above. |
+| 8 | Demonstrate workflow automatic trigger | Pushes to `main` triggered workflow run #4 automatically. Run details and commit SHA are linked above. |
 | 9 | Verify workflow, image, and updated app | Both latest workflow jobs passed. The publish job pulled and ran the commit-tagged GHCR image and tested both `/health` and `/predict`; actual outputs are recorded above. |
 
 ## Deliverables
