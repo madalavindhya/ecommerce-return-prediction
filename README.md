@@ -128,71 +128,37 @@ MLflow and pytest remain available in the full development `requirements.txt`.
 After publishing, the GitHub Actions workflow pulls the commit-tagged image,
 starts it, and smoke-tests `/health` and `/predict` on the hosted runner.
 
-## GitHub repository and CI/CD
+## GitHub repository and verified CI/CD
 
-Initialize and commit the project locally:
+The project is pushed to
+<https://github.com/madalavindhya/ecommerce-return-prediction>. The latest
+verified project-code commit is `213897f38b18af498148035e34f19b72738ecc68`.
+The successful GitHub Actions run is
+<https://github.com/madalavindhya/ecommerce-return-prediction/actions/runs/42198106312>.
+Both validation/build and publish jobs passed. The publish job pushed
+`ghcr.io/madalavindhya/ecommerce-return-prediction` with `latest` and
+`sha-213897f38b18af498148035e34f19b72738ecc68` tags, pulled that commit-tagged
+image on the GitHub-hosted Docker runner, ran it, and verified both endpoints.
 
-```powershell
-git init
-git branch -M main
-git add .
-git commit -m "Build return prediction MLOps project"
+The recorded container responses were:
+
+```json
+{"status":"healthy","model_loaded":true}
+{"predicted_return_status":"Returned","prediction_probability":0.5022433105390813,"model_name":"LogisticRegression"}
 ```
 
-Create a private GitHub repository using the website, or use GitHub CLI if
-installed. The CLI command adds the remote automatically:
+GitHub Actions runs tests and builds Docker for pushes and pull requests to
+`main`; publishing is restricted to successful pushes to `main` and uses the
+built-in `GITHUB_TOKEN`. The publish job also smoke-tests the published
+container. For a local pull/run on a machine with Docker installed:
 
 ```powershell
-gh repo create <OWNER>/<REPOSITORY> --private --source . --remote origin
-```
-
-If you created the repository in the website, add its remote, then push:
-
-```powershell
-git remote add origin https://github.com/<OWNER>/<REPOSITORY>.git
-git push -u origin main
-```
-
-The Actions workflow runs source validation, pytest, and Docker image build for
-pushes and pull requests targeting `main`. Only a successful push to `main`
-publishes `ghcr.io/<lowercase-owner>/<lowercase-repository>` with `latest` and
-`sha-<commit>` tags. The publish job uses the built-in `GITHUB_TOKEN` and
-`packages: write`; configure package/repository settings to allow the workflow
-to publish if your organization requires it. Pull-request runs never publish.
-
-To demonstrate an automatic run, make a meaningful app/model change, e.g.
-improve the API description in `app/main.py`, then:
-
-```powershell
-git add app/main.py
-git commit -m "Clarify prediction API metadata"
-git push origin main
-```
-
-Open the repository's **Actions** tab, select the `CI/CD` workflow run, and
-inspect each job's logs. When the publish job succeeds, verify the package on
-the repository's **Packages** page, then:
-
-```powershell
-docker pull ghcr.io/<lowercase-owner>/<lowercase-repository>:latest
-docker run --rm -p 8000:8000 ghcr.io/<lowercase-owner>/<lowercase-repository>:latest
+docker pull ghcr.io/madalavindhya/ecommerce-return-prediction:latest
+docker run --rm -p 8000:8000 ghcr.io/madalavindhya/ecommerce-return-prediction:latest
 Invoke-RestMethod http://127.0.0.1:8000/health
 ```
 
-Use the prediction example above to exercise `/predict`. This workspace does
-not have Docker or GitHub CLI installed and is not authenticated to GitHub, so
-image build/publish, remote workflow execution, and pulling the published
-image must be completed after installing Docker and authenticating/pushing to
-your own GitHub repository. No remote execution is claimed here.
-
-## Assignment checklist
-
-1. **Load/preprocess:** actual CSV loaded; duplicates removed; missing and invalid values handled in fitted imputers; categories normalized and encoded.
-2. **Feature engineering:** validated discount retained; delivery delay and zero-safe previous-return frequency generated; identifier excluded.
-3. **Train/evaluate:** Logistic Regression and Random Forest evaluated with stratified split, class weights, accuracy, precision, recall, F1, confusion matrices, and reports.
-4. **Serve:** FastAPI `/health` and `/predict` with Pydantic validation and Swagger.
-5. **Repository-ready project:** source, model, data, dependencies, tests, and configuration included; repository creation requires your GitHub account.
-6. **CI validation/testing:** GitHub Actions installs dependencies, compiles source, and runs pytest.
-7. **Container/registry:** workflow builds the image and publishes to GHCR only from validated pushes to `main`.
-8. **Automatic trigger:** push-to-main trigger and demonstration commands are configured; actual trigger requires a GitHub push.
-9. **Verify deployment:** API and tests can be exercised locally; remote run logs and GHCR pull require GitHub/Docker access.
+Docker is not installed on the development PC used for this project; the
+published image was instead pulled and run successfully by the GitHub-hosted
+workflow runner. See [the final completion report](./reports/final_completion_report.md)
+for the nine-task evidence checklist and evaluation results.
