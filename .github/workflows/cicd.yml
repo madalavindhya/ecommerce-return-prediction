@@ -31,7 +31,7 @@ jobs:
         run: python -m compileall -q src app tests
 
       - name: Run tests
-        run: pytest -q
+        run: python -m pytest -q
 
       - name: Build Docker image
         run: docker build -t ecommerce-return-prediction:ci .

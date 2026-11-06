@@ -105,7 +105,7 @@ receive HTTP 422 responses.
 ## Tests
 
 ```powershell
-pytest -q
+python -m pytest -q
 ```
 
 Tests cover loading and preprocessing the supplied CSV, feature engineering
