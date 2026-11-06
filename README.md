@@ -125,6 +125,8 @@ The image includes the trained model and API code and runs as an unprivileged
 user. Check `/health` and `/docs` on port 8000.
 The image installs only the runtime dependencies from `requirements-api.txt`;
 MLflow and pytest remain available in the full development `requirements.txt`.
+After publishing, the GitHub Actions workflow pulls the commit-tagged image,
+starts it, and smoke-tests `/health` and `/predict` on the hosted runner.
 
 ## GitHub repository and CI/CD
 

@@ -70,3 +70,36 @@ jobs:
           tags: |
             ${{ steps.image.outputs.name }}:latest
             ${{ steps.image.outputs.name }}:sha-${{ github.sha }}
+
+      - name: Pull and smoke-test published image
+        shell: bash
+        env:
+          IMAGE: ${{ steps.image.outputs.name }}:sha-${{ github.sha }}
+        run: |
+          set -euo pipefail
+          docker pull "$IMAGE"
+          docker run --detach --rm --name ecommerce-return-api \
+            --publish 8000:8000 "$IMAGE"
+          trap 'docker stop ecommerce-return-api >/dev/null' EXIT
+
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8000/health > health.json; then
+              break
+            fi
+            sleep 1
+          done
+          cat health.json
+          jq --exit-status '.status == "healthy" and .model_loaded == true' health.json
+
+          curl --fail --silent --show-error \
+            --request POST http://127.0.0.1:8000/predict \
+            --header "Content-Type: application/json" \
+            --data '{"Product_Category":"Fashion","Product_Price_INR":2500,"Discount_Percent":20,"Expected_Delivery_Days":5,"Actual_Delivery_Days":7,"Customer_Rating_PreOrder":3.5,"Previous_Returns":2,"Previous_Orders":10,"Payment_Method":"Card","Damaged_Package_Flag":"No","Package_Size":"Medium","Promotion_Active":"Yes"}' \
+            > prediction.json
+          cat prediction.json
+          jq --exit-status '
+            (.predicted_return_status == "Returned"
+              or .predicted_return_status == "Not Returned")
+            and (.prediction_probability >= 0 and .prediction_probability <= 1)
+            and ((.model_name | length) > 0)
+          ' prediction.json
